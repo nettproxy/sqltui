@@ -33,27 +33,22 @@ fn handle_normal(app: &mut App, key: KeyEvent) {
     }
 
     match key.code {
-        // Quit
         KeyCode::Char('q') => app.should_quit = true,
         KeyCode::Char('c') if key.modifiers.contains(KeyModifiers::CONTROL) => {
             app.should_quit = true;
         }
 
-        // Open file
         KeyCode::Char('o') => {
             app.open_prompt = true;
             app.open_input.clear();
         }
 
-        // Panel switching
         KeyCode::Tab => cycle_panel(app),
         KeyCode::BackTab => cycle_panel_back(app),
         KeyCode::Char('1') => { app.active_panel = ActivePanel::Sidebar; }
         KeyCode::Char('2') => { app.active_panel = ActivePanel::Table; }
         KeyCode::Char('3') => { app.active_panel = ActivePanel::Query; }
 
-        // Tab switching (data/schema/query)
-        KeyCode::Char('d') => { app.active_tab = Tab::Data; }
         KeyCode::Char('s') => { app.active_tab = Tab::Schema; }
         KeyCode::Char('/') | KeyCode::Char('e') => {
             app.active_tab = Tab::Query;
@@ -61,13 +56,11 @@ fn handle_normal(app: &mut App, key: KeyEvent) {
             app.mode = AppMode::Query;
         }
 
-        // Navigation in active panel
         KeyCode::Up | KeyCode::Char('k') => navigate_up(app),
         KeyCode::Down | KeyCode::Char('j') => navigate_down(app),
         KeyCode::Left | KeyCode::Char('h') => navigate_left(app),
         KeyCode::Right | KeyCode::Char('l') => navigate_right(app),
 
-        // Page navigation
         KeyCode::PageDown | KeyCode::Char('n') => {
             if app.active_panel == ActivePanel::Table {
                 app.load_next_page();
@@ -79,7 +72,6 @@ fn handle_normal(app: &mut App, key: KeyEvent) {
             }
         }
 
-        // Enter — load table from sidebar
         KeyCode::Enter => {
             if app.active_panel == ActivePanel::Sidebar {
                 app.load_current_selection();
@@ -88,7 +80,6 @@ fn handle_normal(app: &mut App, key: KeyEvent) {
             }
         }
 
-        // Refresh
         KeyCode::Char('r') => {
             if let Some(table) = app.current_table.clone() {
                 app.load_table(&table);
@@ -96,7 +87,6 @@ fn handle_normal(app: &mut App, key: KeyEvent) {
             }
         }
 
-        // Help
         KeyCode::Char('?') => {
             app.status_message =
                 "q:quit  o:open  Tab:panel  d:data  s:schema  /:query  j/k:move  n/p:page  r:refresh"
@@ -114,7 +104,6 @@ fn handle_query_mode(app: &mut App, key: KeyEvent) {
             app.active_panel = ActivePanel::Table;
         }
         KeyCode::Enter if key.modifiers.contains(KeyModifiers::CONTROL) => {
-            // Ctrl+Enter to execute
             app.execute_custom_query();
             app.mode = AppMode::Normal;
         }
@@ -270,8 +259,6 @@ fn cycle_panel_back(app: &mut App) {
 }
 
 fn clamp_sidebar_scroll(app: &mut App) {
-    // Will be adjusted in draw based on viewport height
-    // Simple clamp: ensure scroll doesn't go past selected
     if app.sidebar_index < app.sidebar_scroll {
         app.sidebar_scroll = app.sidebar_index;
     }
