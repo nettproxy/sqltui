@@ -25,3 +25,5 @@ rustc-ice-*.txt
 #.idea/
 PKGBUILD
 .SRCINFO
+PKGBUILD
+.SRCINFO

@@ -10,7 +10,6 @@ pub fn handle_event(app: &mut App, key: KeyEvent) {
 }
 
 fn handle_normal(app: &mut App, key: KeyEvent) {
-    // Open file prompt
     if app.open_prompt {
         match key.code {
             KeyCode::Esc => {
