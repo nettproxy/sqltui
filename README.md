@@ -17,7 +17,7 @@ yay -S sqltui
 **From source**
 
 ```bash
-git clone https://github.com/yourusername/sqltui
+git clone https://github.com/nettproxy/sqltui
 cd sqltui
 cargo build --release
 sudo install -Dm755 target/release/sqltui /usr/local/bin/sqltui
